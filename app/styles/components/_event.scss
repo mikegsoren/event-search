@@ -1,9 +1,12 @@
 .event {
 
 	font-size: 0;	// for inline block elements
-	padding-bottom: 30px;
+	padding: 30px 15px;
 	border-bottom: 1px solid #ddd;
-	margin-bottom: 30px;
+
+	&:hover {
+		background-color: #eee;
+	}
 
 	.event__image {
 		width: 33%;
