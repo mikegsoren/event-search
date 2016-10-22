@@ -8,6 +8,9 @@ const wiredep = require('wiredep').stream;
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
+
+var concat = require("gulp-concat-js");
+
 gulp.task('styles', () => {
     return gulp.src('app/styles/*.scss')
         .pipe($.plumber())
@@ -23,7 +26,19 @@ gulp.task('styles', () => {
         .pipe(reload({stream: true}));
 });
 
-gulp.task('scripts', () => {
+gulp.task("concat", function () {
+    return gulp.src(["app/scripts/*.{js,json}", "app/scripts/**/*.{js,json}"])
+        .pipe(concat({
+            "target": "app.js", // Name to concatenate to 
+            "entry": "./app.js" // Entrypoint for the application, main module 
+                               // The `./` part is important! The path is relative to 
+                               // whatever gulp decides is the base-path, in this 
+                               // example that is `./lib` 
+        }))
+        .pipe(gulp.dest("dist"));
+});
+
+gulp.task('scripts', ['concat'], () => {
     return gulp.src('app/scripts/**/*.js')
         .pipe($.plumber())
         .pipe($.sourcemaps.init())
@@ -129,6 +144,7 @@ gulp.task('serve:dist', () => {
         }
     });
 });
+
 
 gulp.task('serve:test', ['scripts'], () => {
     browserSync({

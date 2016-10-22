@@ -46,7 +46,7 @@
 
                 <h1>{{searchQuery}}</h1>
 
-                <form name="search-form" class="search-form" id="search-form">
+                <form name="search-form" class="search-form" id="search-form" ng-submit="searchEvents()">
 
                     <div class="input-group">
                         <div class="dropdown">
@@ -66,17 +66,31 @@
                     </div>
                     
                     <div class="input-group input-group-lg">
-                        <input type="text" class="form-control" id="search-field" placeholder="Search for shows">
+
+                        <input type="text" class="form-control" id="search-field" ng-model="searchQuery" placeholder="Search for shows">
+                    
                         <span class="input-group-btn">
-                            <button class="btn btn-default btn-primary" type="button" id="search-button">Go!</button>
+                            <button class="btn btn-default btn-primary" type="button" id="search-button" ng-click="searchEvents()">Go!</button>
                         </span>
+
                     </div><!-- /input-group -->
 
-                    <div ng-show="alert == 'location'" class="alert alert-success alert--location" role="alert" id="alert--location">
-                        <span class="lat-long"><strong>Your location: </strong><i>Latitude {{geolocation.lat}}, {{geolocation.long}}</i></span></p>
+
+                    <label>
+                        <input type="checkbox" ng-model="useLocation" ng-click="getLocation()" />
+                        <span>Use Location Services</span>
+                    </label>
+
+                    <div ng-show="alert === 'location'" class="alert alert-success alert--location" role="alert" id="alert--location">
+                        
+                        <span class="lat-long">
+                            <strong>Your location: </strong>
+                            <i>Latitude {{geolocation.lat}}, {{geolocation.long}}</i>
+                        </span>
+
                     </div>
 
-                    <div ng-show="alert == 'location-failed'" class="alert alert-warning alert--location-failed" role="alert" id="alert--location-failed">
+                    <div ng-show="alert === 'location-failed'" class="alert alert-warning alert--location-failed" role="alert" id="alert--location-failed">
                         <p>Please enable location services.</p>
                     </div>
 
@@ -86,18 +100,39 @@
             <div class="row">
 
                 <h4>TicketMaster</h4>
-                <div class="results-container ticketmaster-results"></div>
+                <div class="results-container ticketmaster-results" ng-controller="ticketmasterController">
+                    
+                    <div ng-repeat="event in ticketmasterEvents">
+
+                        <div class="event event--ticketmaster col-lg-6 col-md-6">
+                            <h4>
+                                <a class="event__link" href="http://ticketmaster.com/event/02005147CE235905" target="_blank">Kanye West: The Saint Pablo Tour</a>
+                            </h4>
+
+                            <img class="event__image" src="http://s1.ticketm.net/dam/a/82d/cede11c3-821c-4915-8be2-b506c704c82d_118111_RECOMENDATION_16_9.jpg">
+
+                            <div class="event__description">
+                                <p class="event__date">11/16/2016</p>
+                                <p class="event__location">Newark, New Jersey</p>
+                                <p class="event__source">
+                                    <strong>Source: </strong>TicketMaster
+                                </p>
+                                <a href="http://ticketmaster.com/event/02005147CE235905" class="btn btn-info" target="_blank">Go!</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 
-            <div class="row">
+            <div class="row" ng-controller="eventfulController">
                 <h4>Eventful</h4>
                 <div class="results-container eventful-results"></div>
                 
             </div>
 
             <div class="footer">
-                <p>Back to <a href="http://mikesorensen.rocks/" target="_blank">mikesorensen.rocks</a></p>
+                <!-- <p>Back to <a href="http://mikesorensen.rocks/" target="_blank">mikesorensen.rocks</a></p> -->
             </div>
 
         </div>
@@ -134,7 +169,7 @@
         <!-- endbuild -->
         
         <!-- build:js scripts/main.js -->
-        <script src="scripts/main.js"></script>
+        <script src="scripts/app.js"></script>
         <!-- endbuild -->
     </body>
 </html>
