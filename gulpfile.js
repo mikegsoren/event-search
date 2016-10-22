@@ -29,8 +29,8 @@ gulp.task('styles', () => {
 gulp.task("concat", function () {
     return gulp.src(["app/scripts/*.{js,json}", "app/scripts/**/*.{js,json}"])
         .pipe(concat({
-            "target": "app.js", // Name to concatenate to 
-            "entry": "./app.js" // Entrypoint for the application, main module 
+            "target": "../dist/scripts/app.js", // Name to concatenate to 
+            "entry": "./.js" // Entrypoint for the application, main module 
                                // The `./` part is important! The path is relative to 
                                // whatever gulp decides is the base-path, in this 
                                // example that is `./lib` 
@@ -39,7 +39,7 @@ gulp.task("concat", function () {
 });
 
 gulp.task('scripts', ['concat'], () => {
-    return gulp.src('app/scripts/**/*.js')
+    return gulp.src('../dest/scripts/app.js')
         .pipe($.plumber())
         .pipe($.sourcemaps.init())
         .pipe($.babel())
