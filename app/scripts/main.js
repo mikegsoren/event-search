@@ -3,7 +3,7 @@
 var eventSearchApp = angular.module('eventSearchApp', []);
 
 
-eventSearchApp.controller('mainController', ['scope', function mainController($scope) {
+eventSearchApp.controller('mainController', ['$scope', function mainController($scope) {
 
 	$scope.searchQuery = '';
 	$scope.searchLocation = '';
@@ -66,19 +66,18 @@ eventSearchApp.controller('mainController', ['scope', function mainController($s
 
    	$scope.getGeolocation = function() {
 
+
 		if ($scope.geolocation === {}) {
 			$scope.searchDisabled = true;
 
 	    	// Try HTML5 geolocation.
 		    if (navigator.geolocation) {
+
 		      	navigator.geolocation.getCurrentPosition(function(position) {
 			    	$scope.geolocation.lat = position.coords.latitude;
 			      	$scope.geolocation.long = position.coords.longitude;
 
 			    	// display latitude and longitude
-
-					// document.getElementById('alert--location').innerHTML = '<strong>Your location: </strong><i>Latitude ' + Math.round10($scope.geolocation.lat, -4) + ', Longitude ' + Math.round10($scope.geolocation.long, -4) + '</i>';
-			  //   	document.getElementById('alert--location').classList.add('show');
 
 			  		$scope.alert = 'location';
 			  		$scope.$apply();
@@ -87,6 +86,7 @@ eventSearchApp.controller('mainController', ['scope', function mainController($s
 			    	var googleMapsPromise = $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + $scope.geolocation.lat + ',' + $scope.geolocation.long + '&key=AIzaSyAs5WBq80e70o3Tu7hP3L5flz1XTSvUcUE');
 
 					googleMapsPromise.done(function(data) {
+   						console.log('snoogans');
 
 					  	// hopefully this always gets returned in the same format
 					  	var addressArray = data.results[0].formatted_address.split(',');
@@ -103,12 +103,16 @@ eventSearchApp.controller('mainController', ['scope', function mainController($s
 					});
 
 		      	}, function() {});
+
 		    } else {
 		      	// Browser doesn't support Geolocation
 				// document.getElementById('alert--location-failed').innerHTML = '<p>Please enable location services.</p>';
 				$scope.alert = 'location-failed';
 				$scope.searchDisabled = false;
 		    }
+		} else {
+			$scope.alert = 'location-failed';
+			$scope.searchDisabled = false;
 		}
     }
 

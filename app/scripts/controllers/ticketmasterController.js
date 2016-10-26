@@ -5,24 +5,27 @@ eventSearchApp.controller('ticketmasterController', ['$scope', function ticketma
 
 
 
-	$scope.getTicketMasterResults = function() {
+	$scope.getTicketmasterResults = function() {
 
-		$scope.ticketMasterUrl = 'https://app.ticketmaster.com/discovery/v2/events.json?keyword=' + $scope.searchQuery + 
-			'&stateCode=' + $scope.geolocation.state + 
-			'&apikey=q4TYfyTINvAAreR3WlqGWyqHbZHkmfuG';
+		$scope.ticketmasterUrl = 'https://app.ticketmaster.com/discovery/v2/events.json?keyword=' + $scope.searchQuery;
+
+		// if ()
+		// 	'&stateCode=' + $scope.geolocation.state + 
+		$scope.ticketmasterUrl += '&apikey=q4TYfyTINvAAreR3WlqGWyqHbZHkmfuG';
 
 
 		$.ajax({
 			type: 'GET',
-			url: ticketMasterUrl, 
+			url: $scope.ticketmasterUrl, 
 			dataType: 'json',
 			success: function(json) {
-				console.log(json);
+				// console.log(json);
 
 				if (typeof json._embedded !== 'undefined') {
-					displayTicketMasterResults(json._embedded.events);
+					$scope.displayTicketmasterResults(json._embedded.events);
 				} else {
-					$('.ticketmaster-results').html('').append('<p>No TicketMaster events found.</p>');
+					$scope.ticketmasterNoResults = true;
+					$scope.$apply();	// i think this is needed because async
 				}
 	        },
 			error: function(xhr, status, err) {
@@ -35,8 +38,9 @@ eventSearchApp.controller('ticketmasterController', ['$scope', function ticketma
 
 
 
-	$scope.displayTicketMasterResults = function(eventArray) {
+	$scope.displayTicketmasterResults = function(eventArray) {
 
+		$scope.ticketmasterEvents = [];
 
 		for (var i = 0; i < eventArray.length; i++) {
 
@@ -74,7 +78,7 @@ eventSearchApp.controller('ticketmasterController', ['$scope', function ticketma
 			}
 
 
-			console.log(location);
+			// console.log(location);
 
 			$scope.ticketmasterEvents.push({
 				url: currentEvent.url || '',
@@ -85,6 +89,8 @@ eventSearchApp.controller('ticketmasterController', ['$scope', function ticketma
 				source: 'TicketMaster'
 			});
 
+			$scope.$apply();
+
 		}
 	};
 
@@ -93,7 +99,7 @@ eventSearchApp.controller('ticketmasterController', ['$scope', function ticketma
 
     $scope.$on('eventQuery', function(event, query) { 
 
-    	$scope.getTicketMasterResults();
+    	$scope.getTicketmasterResults();
    	});
 
 

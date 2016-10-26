@@ -8,6 +8,8 @@ eventSearchApp.controller('eventfulController', function eventfulController($sco
 
 	$scope.displayEventfulResults = function(eventArray) {
 
+		$scope.eventfulEvents = [];
+
 		for (var i = 0; i < eventArray.length; i++) {
 
 			var currentEvent = eventArray[i],
@@ -41,7 +43,8 @@ eventSearchApp.controller('eventfulController', function eventfulController($sco
 			}
 
 
-			$('.eventful-results').append($(createEventHtml({
+			// $('.eventful-results').append($(createEventHtml({
+			$scope.eventfulEvents.push({
 				url: currentEvent.url || '',
 				name: currentEvent.title || '',
 				image: imageUrl,
@@ -50,9 +53,11 @@ eventSearchApp.controller('eventfulController', function eventfulController($sco
 				venue: currentEvent.venue_name,
 				venueUrl: currentEvent.venue_url,
 				source: 'Eventful'
-			})));
+			});
 		}
 
+
+		console.log($scope.eventfulEvents);
 
 
 	};
@@ -63,7 +68,7 @@ eventSearchApp.controller('eventfulController', function eventfulController($sco
 		var oArgs = {
           app_key: 'xpsFvT7qL6TZzM5M',
           q: $scope.searchQuery,
-          where: $scope.geolocation.state, 
+          // where: $scope.geolocation.state, 
           // "date": "2013061000-2015062000",
           page_size: 25,
           sort_order: 'date'
@@ -72,13 +77,22 @@ eventSearchApp.controller('eventfulController', function eventfulController($sco
         EVDB.API.call('/events/search', oArgs, function(oData) {
 
         	if (typeof oData.events !== 'undefined' || oData.events !== null) {
-        		// console.log(oData.events.event);
-        		displayEventfulResults(oData.events.event);
+        		console.log(oData);
+        		$scope.displayEventfulResults(oData.events.event);
 			} else {
-				$('.eventful-results').html('').append('<p>No Eventful events found.</p>');
+				$scope.eventfulNoResults = true;
+				$scope.$apply();
 			}
         });
 	};
+
+
+
+    $scope.$on('eventQuery', function(event, query) { 
+
+    	$scope.getEventfulResults();
+   	});
+
 
 
 

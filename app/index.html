@@ -76,12 +76,12 @@
                     </div><!-- /input-group -->
 
 
-                    <label>
-                        <input type="checkbox" ng-model="useLocation" ng-click="getLocation()" />
+                    <label ng-click="getGeolocation()">
+                        <input type="checkbox" ng-model="useLocation"/>
                         <span>Use Location Services</span>
                     </label>
 
-                    <div ng-show="alert === 'location'" class="alert alert-success alert--location" role="alert" id="alert--location">
+                    <div ng-show="alert === 'location'" class="alert alert-success alert--location" role="alert">
                         
                         <span class="lat-long">
                             <strong>Your location: </strong>
@@ -90,7 +90,7 @@
 
                     </div>
 
-                    <div ng-show="alert === 'location-failed'" class="alert alert-warning alert--location-failed" role="alert" id="alert--location-failed">
+                    <div ng-show="alert === 'location-failed'" class="alert alert-warning alert--location-failed" role="alert">
                         <p>Please enable location services.</p>
                     </div>
 
@@ -106,28 +106,57 @@
 
                         <div class="event event--ticketmaster col-lg-6 col-md-6">
                             <h4>
-                                <a class="event__link" href="http://ticketmaster.com/event/02005147CE235905" target="_blank">Kanye West: The Saint Pablo Tour</a>
+                                <a class="event__link" href="{{event.url}}" target="_blank">{{event.name}}</a>
                             </h4>
 
-                            <img class="event__image" src="http://s1.ticketm.net/dam/a/82d/cede11c3-821c-4915-8be2-b506c704c82d_118111_RECOMENDATION_16_9.jpg">
+                            <img class="event__image" src="{{event.image}}">
 
                             <div class="event__description">
-                                <p class="event__date">11/16/2016</p>
-                                <p class="event__location">Newark, New Jersey</p>
+                                <p class="event__date">{{event.date}}</p>
+                                <p class="event__location">{{event.location}}</p>
                                 <p class="event__source">
                                     <strong>Source: </strong>TicketMaster
                                 </p>
-                                <a href="http://ticketmaster.com/event/02005147CE235905" class="btn btn-info" target="_blank">Go!</a>
+                                <a href="{{event.url}}" class="btn btn-info" target="_blank">Go!</a>
                             </div>
                         </div>
                     </div>
+
+                    <p ng-show="ticketmasterNoResults === true">No TicketMaster events found.</p>
                 </div>
 
             </div>
 
             <div class="row" ng-controller="eventfulController">
                 <h4>Eventful</h4>
-                <div class="results-container eventful-results"></div>
+                <div class="results-container eventful-results">
+                    
+                    <div ng-repeat="event in eventfulEvents">
+
+                        <div class="event event--eventful col-lg-6 col-md-6">
+                            <h4>
+                                <a class="event__link" href="{{event.url}}" target="_blank">{{event.name}}</a>
+                            </h4>
+
+                            <img class="event__image" src="{{event.image}}">
+
+                            <div class="event__description">
+                                <p class="event__date">{{event.date}}</p>
+
+                                <a class="event__venue" href="{{event.venueUrl}}" target="_blank">
+                                    <p>{{event.venue}}</p>
+                                </a>
+                                <p class="event__location">{{event.location}}</p>
+                                <p class="event__source">
+                                    <strong>Source: </strong>Eventful
+                                </p>
+                                <a href="{{event.url}}" class="btn btn-info" target="_blank">Go!</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p ng-show="eventfulNoResults">No Eventful events found.</p>
+                </div>
                 
             </div>
 
